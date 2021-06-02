@@ -57,7 +57,6 @@ public class LoginActivity extends AppCompatActivity {
                     }else{
                         Toast.makeText(LoginActivity.this, "Preencha o Email!", Toast.LENGTH_SHORT).show();
                     }
-
             }
         });
     }
@@ -83,15 +82,11 @@ public class LoginActivity extends AppCompatActivity {
                     }catch (Exception e){
                         excecao = "Erro ao cadastrar usuário: " + e.getMessage();
                         e.printStackTrace();
-
                     }
 
                     Toast.makeText(LoginActivity.this, excecao,
                             Toast.LENGTH_SHORT).show();
-
                 }
-
-
             }
         });
     }
@@ -100,15 +95,4 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(new Intent(this, PrincipalActivity.class));
         finish();
     }
-
-
-
-
-
-
-
-
-
-
-
 }

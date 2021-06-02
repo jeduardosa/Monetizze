@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
 import learn.exercicio.monitorizze.R;
 import learn.exercicio.monitorizze.config.ConfiguracaoFirebase;
+import learn.exercicio.monitorizze.helper.Base64Custom;
 import learn.exercicio.monitorizze.model.Usuario;
 
 public class CadastroActivity extends AppCompatActivity {
@@ -52,7 +54,6 @@ public class CadastroActivity extends AppCompatActivity {
                             usuario.setEmail( textoEmail );
                             usuario.setSenha( textoSenha );
                             cadastrarUsuario();
-
                         }else{
                             Toast.makeText(CadastroActivity.this, "Preencha a Senha!", Toast.LENGTH_SHORT).show();
                         }
@@ -64,7 +65,6 @@ public class CadastroActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
     public void cadastrarUsuario(){
         autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
@@ -74,8 +74,10 @@ public class CadastroActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
                             if (task.isSuccessful() ){
+                                String idUsuario = Base64Custom.codificarBase64( usuario.getEmail() );
+                                usuario.setIdUsuario( idUsuario );
+                                usuario.salvar();
                                 finish();
-
                             }else{
                                 String excecao = "";
                                 try {
@@ -89,18 +91,12 @@ public class CadastroActivity extends AppCompatActivity {
                                 }catch (Exception e){
                                     excecao = "Erro ao cadastrar usuário: " + e.getMessage();
                                     e.printStackTrace();
-
                                 }
                                 Toast.makeText(CadastroActivity.this, excecao, Toast.LENGTH_SHORT).show();
                             }
-
-
                         }
                 });
-
-
     }
-
  }
 
 

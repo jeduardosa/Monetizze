@@ -1,5 +1,6 @@
 package learn.exercicio.monitorizze.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -21,19 +22,19 @@ import learn.exercicio.monitorizze.helper.DateCustom;
 import learn.exercicio.monitorizze.model.Movimentacao;
 import learn.exercicio.monitorizze.model.Usuario;
 
-public class ReceitasActivity extends AppCompatActivity {
+public class DespesasActivity extends AppCompatActivity {
 
     private TextInputEditText campoData, campoCategoria, campoDescricao;
     private EditText campoValor;
     private Movimentacao movimentacao;
     private DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebaseDataBase();
     private FirebaseAuth autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
-    private Double receitaTotal;
+    private Double despesaTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_receitas);
+        setContentView(R.layout.activity_despesa);
 
         campoValor = findViewById(R.id.editValor);
         campoData = findViewById(R.id.editData);
@@ -42,12 +43,12 @@ public class ReceitasActivity extends AppCompatActivity {
 
         //Preenche o campo data com a data atual
         campoData.setText( DateCustom.dataAtual() );
-        recuperarReceitaTotal();
+        recuperarDespesaTotal();
     }
 
-    public void salvarReceita(View view){
+    public void salvarDespesa(View view){
 
-        if ( validarCamposReceita() ) {
+        if ( validarCamposDespesa() ) {
             movimentacao = new Movimentacao();
             String data = campoData.getText().toString();
             Double valorRecuperado = Double.parseDouble(campoValor.getText().toString());
@@ -55,16 +56,16 @@ public class ReceitasActivity extends AppCompatActivity {
             movimentacao.setCategoria(campoCategoria.getText().toString());
             movimentacao.setDescricao(campoDescricao.getText().toString());
             movimentacao.setData(data);
-            movimentacao.setTipo("r");
+            movimentacao.setTipo("d");
 
-            Double receitaAtualizada = receitaTotal + valorRecuperado;
-            atualizarReceita( receitaAtualizada );
+            Double despesaAtualizada = despesaTotal + valorRecuperado;
+            atualizarDespesa( despesaAtualizada );
 
             movimentacao.salvar(data);
         }
     }
 
-    public Boolean validarCamposReceita(){
+    public Boolean validarCamposDespesa(){
 
         String textoValor = campoValor.getText().toString();
         String textoData = campoData.getText().toString();
@@ -78,24 +79,24 @@ public class ReceitasActivity extends AppCompatActivity {
 
                         return true;
                     }else{
-                        Toast.makeText(ReceitasActivity.this, "Descrição não foi preenchido!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DespesasActivity.this, "Descrição não foi preenchido!", Toast.LENGTH_SHORT).show();
                         return false;
                     }
                 }else{
-                    Toast.makeText(ReceitasActivity.this, "Categoria não foi preenchido!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DespesasActivity.this, "Categoria não foi preenchido!", Toast.LENGTH_SHORT).show();
                     return false;
                 }
             }else{
-                Toast.makeText(ReceitasActivity.this, "Data não foi preenchido!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DespesasActivity.this, "Data não foi preenchido!", Toast.LENGTH_SHORT).show();
                 return false;
             }
         }else{
-            Toast.makeText(ReceitasActivity.this, "Valor não foi preenchido!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(DespesasActivity.this, "Valor não foi preenchido!", Toast.LENGTH_SHORT).show();
             return false;
         }
     }
 
-    public void recuperarReceitaTotal(){
+    public void recuperarDespesaTotal(){
         String emailUsuario = autenticacao.getCurrentUser().getEmail();
         String idUsuario = Base64Custom.codificarBase64( emailUsuario );
         DatabaseReference usuarioRef = firebaseRef.child("usuarios").child( idUsuario );
@@ -104,7 +105,7 @@ public class ReceitasActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 Usuario usuario = snapshot.getValue( Usuario.class );
-                receitaTotal = usuario.getReceitaTotal();
+                despesaTotal = usuario.getDespesaTotal();
             }
 
             @Override
@@ -113,11 +114,11 @@ public class ReceitasActivity extends AppCompatActivity {
             }
         });
     }
-    public void atualizarReceita(Double receita){
+    public void atualizarDespesa(Double despesa){
         String emailUsuario = autenticacao.getCurrentUser().getEmail();
         String idUsuario = Base64Custom.codificarBase64( emailUsuario );
         DatabaseReference usuarioRef = firebaseRef.child("usuarios").child( idUsuario );
 
-        usuarioRef.child("receitaTotal").setValue( receita );
+        usuarioRef.child("despesaTotal").setValue( despesa );
     }
 }

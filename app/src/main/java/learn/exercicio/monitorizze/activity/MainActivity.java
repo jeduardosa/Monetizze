@@ -19,38 +19,32 @@ public class MainActivity extends IntroActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
 
         setButtonBackVisible(false);
         setButtonNextVisible(false);
 
         addSlide(new FragmentSlide.Builder()
                 .background(R.color.white)
-                //.backgroundDark(R.color.intro)
                 .fragment(R.layout.intro_um)
                 .build());
 
         addSlide(new FragmentSlide.Builder()
                 .background(R.color.white)
-                //.backgroundDark(R.color.intro)
                 .fragment(R.layout.intro_dois)
                 .build());
 
         addSlide(new FragmentSlide.Builder()
                 .background(R.color.white)
-                //.backgroundDark(R.color.intro)
                 .fragment(R.layout.intro_tres)
                 .build());
 
         addSlide(new FragmentSlide.Builder()
                 .background(R.color.white)
-                //.backgroundDark(R.color.intro)
                 .fragment(R.layout.intro_quatro)
                 .build());
 
         addSlide(new FragmentSlide.Builder()
                 .background(R.color.white)
-                //.backgroundDark(R.color.intro)
                 .fragment(R.layout.intro_cadastro)
                 .canGoForward(false)
                 .build());
